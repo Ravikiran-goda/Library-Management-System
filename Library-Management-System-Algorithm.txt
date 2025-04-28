@@ -1,0 +1,199 @@
+Library Management System Algorithm
+
+User Selection
+    Display main menu with options
+        Option 1: Student
+        Option 2: Librarian
+    Read user choice
+    If user choice equals 1, go to Student section
+    Else if user choice equals 2, go to Librarian section
+    Else display "Invalid choice" and return to User Selection
+
+Student Section
+    Ask for student id
+    Search for student id in members list
+    If student id not found:
+        Display Student not found. Creating new membership.
+        Read student details (name, phone, email, address)
+        Create new student record with empty borrowed books list
+        Add student to members list
+    Display student menu:
+        Option a: Borrow a book
+        Option b: Return a book
+        Option c: Exit
+    Read student choice
+    If student choice equals a, go to Borrow Book section
+    Else if student choice equals b, go to Return Book section
+    Else if student choice equals c, go to User Selection
+    Else display Invalid choice" and return to student menu
+
+Borrow Book Section
+    Count books in student's borrowed books list
+    If count is greater than or equal to 5:
+        Display You have reached the maximum limit of 5 books.
+        Return to student menu
+    Display all categories (id, branch, description)
+    Read category id
+    If category  not found in categories:
+        Display Category not found.
+        Return to student menu
+    If books[category id] is empty:
+        Display Books category is empty. Please comeback within 3-4 days.
+        Ask Do you want to continue for book loan? (y/n)
+        Read continue choice
+        If continue choice equals y, display all categories again
+        Else return to student menu
+    Display all books in books[category id]
+    Read book id
+    If book id not found in books[category id]:
+        Display Book not found.
+        Ask Do you want to continue for book loan? (y/n)
+        Read continue choice
+        If continue choice equals y, display all categories again
+        Else return to student menu
+    Create new loan record:
+        member id = student id
+        book id = book id
+        loan date = current date
+    Add loan to loans list
+    Add book id to student's borrowed books list
+    Remove book from books[category id]
+    Display Book successfully borrowed.
+    Return to student menu
+
+Return Book Section
+    Read student id and book id
+    Search for student in members list
+    If book id not in student's borrowed books list:
+        Display This book was not borrowed by you.
+        Return to student menu
+    Remove book id from student's borrowed books list
+    Find loan record with matching student id and book id
+    Remove loan record from loans list
+    Determine book's category id (using book metadata)
+    Add book back to books[category id]
+    Display Book successfully returned.
+    Return to student menu
+
+Librarian Section
+    Ask for librarian id
+    Validate librarian id
+    If librarian id is invalid:
+        Display Invalid librarian ID. Please provide a proper ID.
+        Return to User Selection
+    Display librarian menu:
+        Option a: Delete a category
+        Option b: Add a category
+        Option c: Add a book
+        Option d: Delete a book
+        Option e: Add an author
+        Option f: Delete an author
+        Option g: Exit
+    Read librarian choice
+    Based on librarian choice, go to appropriate section:
+        If a, go to Delete Category section
+        If b, go to Add Category section
+        If c, go to Add Book section
+        If d, go to Delete Book section
+        If e, go to Add Author section
+        If f, go to Delete Author section
+        If g, return to main menu
+        Else display Invalid choice and return to librarian menu
+
+Delete Category Section
+    Display all categories
+    Read category id
+    If category id not found in categories:
+        Display Category not found.
+        Return to librarian menu
+    If books[category id] is not empty:
+        Display Cannot delete category: Books exist in this category.
+        Return to librarian menu
+    Remove category from categories list
+    Display Category successfully deleted.
+    Return to librarian menu
+
+Add Category Section
+    Read category details (id, branch)
+    If category id already exists in categories:
+        Display Category already exists.
+        Return to librarian menu
+    Create new category with provided details
+    Add category to categories list
+    Initialize books[category id] as empty list
+    Display Category successfully added.
+    Return to librarian menu
+
+Add Book Section
+    Display all categories
+    Read category id
+    If category id not found in categories:
+        Display Category does not exist. Let's create it.
+        Follow Add Category section steps
+    Read author id
+    Search for author id in authors list
+    If author id not found:
+        Display Author not found. Let's add a new author.
+        Follow Add Author section steps
+    Read book details (id, title, publication year)
+    Create new book with provided details and author id
+    Add book to books[category id]
+    Display Book successfully added.
+    Return to librarian menu
+
+Delete Book Section
+    Read book name 
+    check if book is present in library or not 
+    if not present book not exists
+    Display all books with matches book name 
+    Read book id
+    If book is currently on loan:
+        Display Cannot delete: Book is currently on loan.
+        Return to librarian menu
+    Remove book from books[category id]
+    Display Book successfully deleted.
+    Return to librarian menu
+
+Add Author Section
+    Read author details (id, name, birthdate, nationality)
+    If author id already exists in authors:
+        Display Author already exists.
+        Return to librarian menu
+    Create new author with provided details
+    Add author to authors list
+    Display Author successfully added.
+    Return to librarian menu
+
+Delete Author Section
+    Display all authors
+    Read author id
+    If author id not found in authors:
+        Display Author not found.
+        Return to librarian menu
+    Check if any book in any category has this author id
+    If books exist with this author:
+        Display Cannot delete: Books by this author exist in the library.
+        Return to librarian menu
+    Remove author from authors list
+    Display Author successfully deleted.
+    Return to librarian menu
+
+Helper Operations
+
+Search for Student
+    Iterate through members list
+    For each member, compare student id with target id
+    If match found, return member
+    If no match found, return null
+
+Check if Book is on Loan
+    Iterate through loans list
+    For each loan, check if book id matches target book id
+    If match found, return true
+    If no match found, return false
+
+Find Book Category
+    Iterate through all keys in books dictionary
+    For each category id, search for book id in books[category id]
+    If found, return category id
+    If not found in any category, return null
