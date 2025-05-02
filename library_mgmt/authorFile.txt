@@ -1,0 +1,24 @@
+John Smith
+1975-08-12
+American
+Priya Sharma
+1982-03-25
+Indian
+Zhang Wei
+1968-11-30
+Chinese
+Maria Rodriguez
+1990-05-17
+Spanish
+David Johnson
+1973-01-08
+British
+Ryan Holiday
+1999-10-20
+American
+Alan V. Oppenheim
+1997
+American us
+Alan S. Willsky
+1978
+Candian
