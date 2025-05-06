@@ -122,11 +122,11 @@ public class Library {
         int aval_cop=sc.nextInt();
         sc.nextLine();
         book_list.Setid();
-        BookLL.Book TEMP = new BookLL.Book(id, title, publication_year, author_id, aval_cop);
+        book_list.insertLast(new BookLL.Book(id, title, publication_year, author_id, aval_cop));
         book_list.display();
         category_list.display();
         author_list.display();
-        book_list.insertLast(TEMP);
+        
         System.out.println("Book Sucessfully added into Library");
     }
 

@@ -138,7 +138,10 @@ public class LoanLL implements Serializable{
         public int getBookId() {
             return BookId;
         }
-
+        
+        public String getLoanDate() {
+            return LoanDate;
+        }
         public int getStudent_id() {
             return student_id;
         }

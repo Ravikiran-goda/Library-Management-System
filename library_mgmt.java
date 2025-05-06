@@ -1,7 +1,10 @@
 import java.io.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.*;
 import java.util.Scanner;
 
+import Data.Db;
 import Data.ReadWrite;
 import LL.*;
 import Student.*;
@@ -17,7 +20,7 @@ import LibraryFunctions.*;
  */
 public class library_mgmt {
     
-    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
         Scanner sc = new Scanner(System.in);
         File Librarydata=new File("D:\\library_mgmt\\library_mgmt\\library_mgmt\\library.dat");
         MemberShipll student_list = new MemberShipll();
@@ -48,15 +51,21 @@ public class library_mgmt {
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        book_list.display();
-        author_list.display();
-        category_list.display();
-        student_list.display();
-        loan_list.display();
+        Dbintiation dbintiation=new Dbintiation();
+        Connection conn=dbintiation.getConnection();
+        Db database=new Db();
+        database.DisplayCategory(conn);
+        System.out.println(database.getcategoryId("ECE", conn));
+        System.out.println(database.getcategoryId("MECHANICAL", conn));
+        System.out.println(database.getcategoryId("CSE", conn));
+        System.out.println(database.getBooksCountByCategory(database.getcategoryId("ECE", conn), conn));
+        database.displaybycatandAUthor(database.getcategoryId("ECE", conn), conn);
+        System.out.println(database.isBookInCategory(7, database.getcategoryId("ECE",conn),conn));
+        System.out.println(database.availCopies(1, conn));
         int choice;
         Student studentFun= new Student();
         Library LibraryFun=new Library();
+        
         do {
             System.out.println("Welcome to the Library Management System");
             System.out.println("1. Student");
@@ -72,7 +81,7 @@ public class library_mgmt {
                     int student_id = sc.nextInt();
                     MemberShipll.Student student;
                     sc.nextLine();
-                    if (!student_list.findById(student_id)) {
+                    if (!database.getStudentId(student_id, conn)) {
                         System.out.println("Student not found. Creating new membership.");
                         System.out.print("Enter Name: ");
                         String name = sc.nextLine();
@@ -83,7 +92,7 @@ public class library_mgmt {
                         System.out.print("Enter Address: ");
                         String address = sc.nextLine();
                         LocalDate memberShipDate = LocalDate.now();
-                        student_list.insertLast(new MemberShipll.Student(student_id, name, email, mobile_no, address, memberShipDate));
+                        database.insertStudentsToDB(new MemberShipll.Student(student_id, name, email, mobile_no, address, memberShipDate),conn);
                     }
                     student = student_list.getstudent(student_id);
                     int Student_choice;
@@ -98,16 +107,13 @@ public class library_mgmt {
                         
                         switch (Student_choice) {
                             case 1:
-                                studentFun.borrowBook(sc, student, book_list, category_list, loan_list,student_list,author_list);
-                                rw.writeobjectsintofile(Librarydata, category_list, book_list,author_list,student_list, loan_list);
+                                studentFun.borrowBook(sc,student_id,database,conn);
                                 break;          
                             case 2:
-                                studentFun.returnBook(sc, student, book_list, loan_list);
-                                rw.writeobjectsintofile(Librarydata, category_list, book_list,author_list,student_list, loan_list);
+                               studentFun.returnBook(sc,student_id,database,conn);
                                 break;
                             case 3:
                                 System.out.println("Return to main menu");
-                                rw.writeobjectsintofile(Librarydata, category_list, book_list,author_list,student_list, loan_list);
                                 break;
                             default:
                                 System.out.println("Invalid choice.");
